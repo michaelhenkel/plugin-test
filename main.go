@@ -20,17 +20,23 @@ const (
 var apiList = map[string]plugin.Symbol{}
 
 func main(){
-	listener()
+	var host string
+	if len(os.Args) > 1{
+		host = os.Args[1]
+	} else {
+		host = CONN_HOST
+	}
+	listener(host)
 }
 
-func listener(){
-	l, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
+func listener(host string){
+	l, err := net.Listen(CONN_TYPE, host+":"+CONN_PORT)
 	if err != nil {
 		fmt.Println("Error listening:", err.Error())
 		os.Exit(1)
 	}
 	defer l.Close()
-	fmt.Println("Listening on " + CONN_HOST + ":" + CONN_PORT)
+	fmt.Println("Listening on " + host + ":" + CONN_PORT)
 	for {
 		conn, err := l.Accept()
 		if err != nil {
@@ -76,8 +82,10 @@ func apiHandler(rawData string){
 	switch pluginName {
 	case "loadIRD":
 		irdName := dataInterface["name"]
+		irdVersion := dataInterface["version"]
 		fmt.Println("Loading IRD: ", irdName)
-		loadPlugin(irdName.(string))
+		fmt.Println("IRD version: ", irdVersion)
+		loadPlugin(irdName.(string), irdVersion.(string))
 	case "runIR":
 		irName := dataInterface["name"]
 		irAction:= dataInterface["action"]
@@ -99,8 +107,8 @@ func runIr(pluginName string, action string, data map[string]interface{}){
 	}
 }
 
-func loadPlugin(pluginName string) {
-	pluginPath := fmt.Sprintf("%s/%s.so", pluginName, pluginName)
+func loadPlugin(pluginName string, pluginVersion string) {
+	pluginPath := fmt.Sprintf("%s/%s.%s.so", pluginName, pluginName, pluginVersion)
 	p, err := plugin.Open(pluginPath)
         if err != nil {
                 panic(err)
