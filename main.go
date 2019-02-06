@@ -112,11 +112,4 @@ func loadPlugin(pluginName string) {
         }
 
 	apiList[pluginName] = GetIntentResource
-
-//        intentresourceinterface, err := GetIntentResource.(func(string) (intentresourceinterface.IntentResourceInterface, error))("foo1")
-//        fmt.Printf("GetIntentResource. result: %T %v %v\n", intentresourceinterface, intentresourceinterface, err)
-//        intentresourceinterface.Create()
-
-	//return intentresourceinterface
-        //fmt.Println("\tName:", intentresourceinterface.Create())
 }
