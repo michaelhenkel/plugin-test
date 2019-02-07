@@ -1,17 +1,15 @@
 package main
 import (
 	"fmt"
-	"github.com/michaelhenkel/intentresourceinterface"
+	"github.com/michaelhenkel/plugin-test/intentresourceinterface"
+	"github.com/michaelhenkel/plugin-test/types"
 )
 
-type Bar struct {
-	Name	string
-	Prop	string
-	Ref	string
-}
+type Bar types.Barv2
 
-func (i Bar) Create() {
+func (i Bar) Create() string {
 	fmt.Println("\t\t Creating Bar:", i)
+	return i.Name
 }
 
 func GetIntentResource(data map[string]interface{}) (i intentresourceinterface.IntentResourceInterface, err error) {

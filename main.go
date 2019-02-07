@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"plugin"
-	"github.com/michaelhenkel/intentresourceinterface"
+	"github.com/michaelhenkel/plugin-test/intentresourceinterface"
 	"net"
 	"os"
 	"bufio"
@@ -103,7 +103,8 @@ func runIr(pluginName string, action string, data map[string]interface{}){
 	fmt.Printf("GetIntentResource. result: %T %v %v\n", intentresourceinterface, intentresourceinterface, err)
 	switch action {
 	case "create":
-		intentresourceinterface.Create()
+		result := intentresourceinterface.Create()
+		fmt.Println("\tCreate result: ", result)
 	}
 }
 
