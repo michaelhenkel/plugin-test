@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"plugin"
 	"github.com/michaelhenkel/plugin-test/intentresourceinterface"
+	"github.com/michaelhenkel/plugin-test/writer"
 	"net"
 	"os"
 	"bufio"
@@ -18,6 +19,8 @@ const (
 )
 
 var apiList = map[string]plugin.Symbol{}
+var jobs chan int
+var out chan string
 
 func main(){
 	var host string
@@ -103,7 +106,10 @@ func runIr(pluginName string, action string, data map[string]interface{}){
 	fmt.Printf("GetIntentResource. result: %T %v %v\n", intentresourceinterface, intentresourceinterface, err)
 	switch action {
 	case "create":
-		result := intentresourceinterface.Create()
+		jobs = make(chan int, 100)
+		out = make(chan string)
+		go writer.Writer(jobs, out)
+		result := intentresourceinterface.Create(jobs, out)
 		fmt.Println("\tCreate result: ", result)
 	}
 }
